@@ -28,7 +28,9 @@ public class Main2Activity extends AppCompatActivity {
 
     private int color = Color.BLACK;
     private int thickness = 6;
-    private File photo;
+    private int thicknessBefore;
+    private int colorBefore;
+    private boolean eraseInAction = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,47 +50,82 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.brush:
+                if (eraseInAction) afterErase();
+                return true;
             case R.id.red:
+                if (eraseInAction) afterErase();
                 color = Color.RED;
                 return true;
             case R.id.green:
+                if (eraseInAction) afterErase();
                 color = Color.GREEN;
                 return true;
             case R.id.black:
+                if (eraseInAction) afterErase();
                 color = Color.BLACK;
                 return true;
             case R.id.blue:
+                if (eraseInAction) afterErase();
                 color = Color.BLUE;
                 return true;
             case R.id.white:
+                if (eraseInAction) afterErase();
                 color = Color.WHITE;
                 return true;
             case R.id.thickness1:
+                if (eraseInAction) afterErase();
                 thickness = 1;
                 return true;
             case R.id.thickness2:
+                if (eraseInAction) afterErase();
                 thickness = 2;
                 return true;
             case R.id.thickness4:
+                if (eraseInAction) afterErase();
                 thickness = 4;
                 return true;
             case R.id.thickness6:
+                if (eraseInAction) afterErase();
                 thickness = 6;
                 return true;
             case R.id.thickness8:
+                if (eraseInAction) afterErase();
                 thickness = 8;
                 return true;
             case R.id.thickness10:
+                if (eraseInAction) afterErase();
                 thickness = 10;
                 return true;
             case R.id.eraserSmall:
-                thickness = 6;
-                color = Color.TRANSPARENT;
+                beforeErase();
+                thickness = 10;
+                return true;
+            case R.id.eraserMedium:
+                beforeErase();
+                thickness = 30;
+                return true;
+            case R.id.eraserLarge:
+                beforeErase();
+                thickness = 70;
                 return true;
             case R.id.save:
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void afterErase(){
+        thickness = thicknessBefore;
+        color = colorBefore;
+        eraseInAction = false;
+    }
+
+    public void beforeErase(){
+        thicknessBefore = thickness;
+        colorBefore = color;
+        color = Color.WHITE;
+        eraseInAction = true;
     }
 
     class Lienzo extends View {
@@ -125,6 +162,7 @@ public class Main2Activity extends AppCompatActivity {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
+            canvas.drawRGB(255,255,255);
             canvas.drawBitmap(canvasBitmap,0,0,canvasPaint);
             canvas.drawPath(path, brush);
         }
