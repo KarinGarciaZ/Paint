@@ -127,7 +127,6 @@ public class Main2Activity extends AppCompatActivity {
             super.onDraw(canvas);
             canvas.drawBitmap(canvasBitmap,0,0,canvasPaint);
             canvas.drawPath(path, brush);
-
         }
 
         @Override
