@@ -2,27 +2,32 @@ package com.example.oscar.androidpaint;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.UUID;
 
 public class Main2Activity extends AppCompatActivity {
 
@@ -31,13 +36,14 @@ public class Main2Activity extends AppCompatActivity {
     private int thicknessBefore;
     private int colorBefore;
     private boolean eraseInAction = false;
+    private Lienzo background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         ConstraintLayout myLayout = (ConstraintLayout)findViewById(R.id.myLayout);
-        Lienzo background = new Lienzo(this);
+        background = new Lienzo(this);
         myLayout.addView(background);
     }
     @Override
@@ -110,9 +116,36 @@ public class Main2Activity extends AppCompatActivity {
                 thickness = 70;
                 return true;
             case R.id.save:
+                showNameDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showNameDialog(){
+        AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
+        dialogo.setTitle("Ingrese el nombre de la imagen:");
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        dialogo.setView(input);
+
+        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String name = input.getText().toString();
+                save(name);
+            }
+        });
+        dialogo.setCancelable(false);
+        dialogo.show();
+    }
+
+    public void save(String name){
+        background.setDrawingCacheEnabled(true);
+        String imageSaved = MediaStore.Images.Media.insertImage(getContentResolver(), background.getDrawingCache(), name+".png", "drawing");
+        if (imageSaved != null) Toast.makeText(this, "Dibujo guardado", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, "La imagen no se guardó", Toast.LENGTH_SHORT).show();
+        background.destroyDrawingCache();
     }
 
     public void afterErase(){
