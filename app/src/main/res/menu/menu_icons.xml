@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item android:id="@+id/colors"
+        android:icon="@drawable/ic_colors"
+        android:title="Item 1"
+        app:showAsAction="always">
+        <menu>
+            <item android:id="@+id/red"
+                android:icon="@drawable/ic_red"
+                android:title="Rojo"
+                />
+            <item android:id="@+id/green"
+                android:icon="@drawable/ic_green"
+                android:title="Verde"
+                />
+            <item android:id="@+id/blue"
+                android:icon="@drawable/ic_blue"
+                android:title="Azul"
+                />
+            <item android:id="@+id/black"
+                android:icon="@drawable/ic_black"
+                android:title="Negro"
+                />
+            <item android:id="@+id/white"
+                android:icon="@drawable/ic_white"
+                android:title="Blanco"
+                />
+        </menu>
+    </item>
+    <item android:id="@+id/brush"
+        android:icon="@drawable/ic_brush"
+        android:title="Item 1"
+        app:showAsAction="always">
+        <menu>
+            <item android:id="@+id/thickness1"
+                android:icon="@drawable/ic_thickness_1"
+                android:title="Grosor 1"
+                />
+            <item android:id="@+id/thickness2"
+                android:icon="@drawable/ic_thickness_2"
+                android:title="Grosor 2"
+                />
+            <item android:id="@+id/thickness4"
+                android:icon="@drawable/ic_thickness_4"
+                android:title="Grosor 4"
+                />
+            <item android:id="@+id/thickness6"
+                android:icon="@drawable/ic_thickness_6"
+                android:title="Grosor 6"
+                />
+            <item android:id="@+id/thickness8"
+                android:icon="@drawable/ic_thickness_8"
+                android:title="Grosor 8"
+                />
+            <item android:id="@+id/thickness10"
+                android:icon="@drawable/ic_thickness_10"
+                android:title="Grosor 10"
+                />
+
+        </menu>
+    </item>
+    <item android:id="@+id/eraser"
+        android:icon="@drawable/ic_eraser"
+        android:title="Item 1"
+        app:showAsAction="always">
+        <menu>
+            <item android:id="@+id/eraserSmall"
+                android:icon="@drawable/ic_eraser_small"
+                android:title="Pequeño"
+                />
+            <item android:id="@+id/eraserMedium"
+                android:icon="@drawable/ic_eraser_medium"
+                android:title="Normal"
+                />
+            <item android:id="@+id/eraserLarge"
+                android:icon="@drawable/ic_eraser_large"
+                android:title="Grande"
+                />
+        </menu>
+    </item>
+    <item android:id="@+id/save"
+        android:icon="@drawable/ic_save"
+        android:title="Item 1"
+        app:showAsAction="always"/>
+</menu>
