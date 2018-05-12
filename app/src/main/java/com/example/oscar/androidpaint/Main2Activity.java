@@ -141,11 +141,18 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void save(String name){
-        background.setDrawingCacheEnabled(true);
-        String imageSaved = MediaStore.Images.Media.insertImage(getContentResolver(), background.getDrawingCache(), name+".png", "drawing");
-        if (imageSaved != null) Toast.makeText(this, "Dibujo guardado", Toast.LENGTH_SHORT).show();
-        else Toast.makeText(this, "La imagen no se guardó", Toast.LENGTH_SHORT).show();
-        background.destroyDrawingCache();
+        try{
+            background.setDrawingCacheEnabled(true);
+            Bitmap bitmap = background.getDrawingCache();
+            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lienzos/"+name+".png");
+
+            FileOutputStream ostream = new FileOutputStream(f);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+            ostream.close();
+        } catch(Exception e){
+            Toast.makeText(this, "La imagen no se guardó", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     public void afterErase(){
