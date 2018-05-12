@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -133,11 +134,26 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String name = input.getText().toString();
-                save(name);
+                if (!validateIfFileAlreadyExists(name))
+                    save(name);
+                else
+                    Toast.makeText(Main2Activity.this, "Nombre de imagen existente, asigna otro.", Toast.LENGTH_SHORT).show();
             }
         });
-        dialogo.setCancelable(false);
+        dialogo.setCancelable(true);
         dialogo.show();
+    }
+
+    public boolean validateIfFileAlreadyExists(String name){
+        File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Lienzos/");
+        File[] listOfFiles = folder.listFiles();
+
+        String[] myArray;
+        myArray = new String[listOfFiles.length];
+        for (int x = 0; x < myArray.length; x++)
+            if (listOfFiles[x].getName().equals(name+".png"))
+                return true;
+        return false;
     }
 
     public void save(String name){
@@ -153,6 +169,7 @@ public class Main2Activity extends AppCompatActivity {
             Toast.makeText(this, "La imagen no se guardó", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
+        finish();
     }
 
     public void afterErase(){
