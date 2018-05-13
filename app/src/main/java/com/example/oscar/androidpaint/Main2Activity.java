@@ -135,26 +135,52 @@ public class Main2Activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showNameDialog(){
-        AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
-        dialogo.setTitle("Ingrese el nombre de la imagen:");
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        dialogo.setView(input);
+    public void showNameDialog()
+    {
+        if(name.equals(""))
+        {
+            AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
+            dialogo.setTitle("Ingrese el nombre de la imagen:");
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            dialogo.setView(input);
 
-        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String name = input.getText().toString();
-                if (!validateIfFileAlreadyExists(name))
-                    save(name);
-                else
-                    Toast.makeText(Main2Activity.this, "Nombre de imagen existente, asigna otro.", Toast.LENGTH_SHORT).show();
-            }
-        });
-        dialogo.setCancelable(true);
-        dialogo.show();
+            dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String name = input.getText().toString();
+                    if(validateNameOfFile(name))
+                        if (!validateIfFileAlreadyExists(name))
+                        {
+                            name += ".png";
+                            save(name);
+                        }
+                        else
+                            Toast.makeText(Main2Activity.this, "Nombre de imagen existente, asigna otro.", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(Main2Activity.this,"Nombre de archivo inválido",Toast.LENGTH_SHORT).show();
+                }
+            });
+            dialogo.setCancelable(true);
+            dialogo.show();
+        }
+        else
+            save(name);
+
     }
+    private boolean validateNameOfFile(String name)
+    {
+        if(Character.isUpperCase(name.charAt(0)))
+        {
+                for(int x=1; x<name.length(); x++)
+                    if(!Character.isLowerCase(name.charAt(x)) && name.charAt(x) != '_' && !Character.isDigit(name.charAt(x)))
+                        return false;
+        }
+        else
+            return false;
+        return true;
+    }
+
 
     public boolean validateIfFileAlreadyExists(String name)
     {
@@ -173,12 +199,13 @@ public class Main2Activity extends AppCompatActivity {
         return false;
     }
 
-    public void save(String name){
+    public void save(String name)
+    {
         try{
             background.setDrawingCacheEnabled(true);
             Bitmap bitmap = background.getDrawingCache();
             File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath(), "Lienzos");
-            File f = new File(path,name+".png");
+            File f = new File(path,name);
 
             FileOutputStream ostream = new FileOutputStream(f);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
