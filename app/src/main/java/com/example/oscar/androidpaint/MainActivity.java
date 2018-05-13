@@ -60,21 +60,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getFiles(){
-
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Lienzos/");
         File[] listOfFiles = folder.listFiles();
 
         String[] myArray;
-        myArray = new String[listOfFiles.length];
+        if(listOfFiles != null) {
+            myArray = new String[listOfFiles.length];
+            for (int x = 0; x < myArray.length; x++)
+                if (listOfFiles[x].isFile())
+                    myArray[x] = listOfFiles[x].getName();
 
-        for (int x = 0; x < myArray.length; x++)
-            if (listOfFiles[x].isFile())
-                myArray[x] = listOfFiles[x].getName();
 
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myArray);
-        lvList.setAdapter(adapter);
-
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myArray);
+            lvList.setAdapter(adapter);
+        }
     }
 
     @Override

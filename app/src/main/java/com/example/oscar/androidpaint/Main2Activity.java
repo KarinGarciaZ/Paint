@@ -149,10 +149,12 @@ public class Main2Activity extends AppCompatActivity {
         File[] listOfFiles = folder.listFiles();
 
         String[] myArray;
-        myArray = new String[listOfFiles.length];
-        for (int x = 0; x < myArray.length; x++)
-            if (listOfFiles[x].getName().equals(name+".png"))
-                return true;
+        if(listOfFiles != null) {
+            myArray = new String[listOfFiles.length];
+            for (int x = 0; x < myArray.length; x++)
+                if (listOfFiles[x].getName().equals(name + ".png"))
+                    return true;
+        }
         return false;
     }
 
@@ -160,7 +162,7 @@ public class Main2Activity extends AppCompatActivity {
         try{
             background.setDrawingCacheEnabled(true);
             Bitmap bitmap = background.getDrawingCache();
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lienzos/"+name+".png");
+            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "/Lienzos/"+name+".png");
 
             FileOutputStream ostream = new FileOutputStream(f);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
