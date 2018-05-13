@@ -2,18 +2,24 @@ package com.example.oscar.androidpaint;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,11 +28,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.UUID;
 
@@ -38,12 +47,15 @@ public class Main2Activity extends AppCompatActivity {
     private int colorBefore;
     private boolean eraseInAction = false;
     private Lienzo background;
-
+    private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         ConstraintLayout myLayout = (ConstraintLayout)findViewById(R.id.myLayout);
+
+        Bundle bundle = getIntent().getExtras();
+        name = bundle.getString("name");
         background = new Lienzo(this);
         myLayout.addView(background);
     }
@@ -144,15 +156,20 @@ public class Main2Activity extends AppCompatActivity {
         dialogo.show();
     }
 
-    public boolean validateIfFileAlreadyExists(String name){
+    public boolean validateIfFileAlreadyExists(String name)
+    {
+
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Lienzos/");
         File[] listOfFiles = folder.listFiles();
+        if(listOfFiles != null)
+        {
+            String[] myArray;
+            myArray = new String[listOfFiles.length];
+            for (int x = 0; x < myArray.length; x++)
+                if (listOfFiles[x].getName().equals(name+".png"))
+                    return true;
 
-        String[] myArray;
-        myArray = new String[listOfFiles.length];
-        for (int x = 0; x < myArray.length; x++)
-            if (listOfFiles[x].getName().equals(name+".png"))
-                return true;
+        }
         return false;
     }
 
@@ -160,13 +177,14 @@ public class Main2Activity extends AppCompatActivity {
         try{
             background.setDrawingCacheEnabled(true);
             Bitmap bitmap = background.getDrawingCache();
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lienzos/"+name+".png");
+            File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath(), "Lienzos");
+            File f = new File(path,name+".png");
 
             FileOutputStream ostream = new FileOutputStream(f);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
             ostream.close();
         } catch(Exception e){
-            Toast.makeText(this, "La imagen no se guardó", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         finish();
@@ -194,10 +212,17 @@ public class Main2Activity extends AppCompatActivity {
         private Canvas canvasDraw;
         Bitmap canvasBitmap;
 
-        public Lienzo(Context context) {
+
+
+        public Lienzo(Context context)
+        {
             super(context);
             setupDrawing();
+
         }
+
+
+
 
         public void setupDrawing(){
             path = new Path();
@@ -219,8 +244,14 @@ public class Main2Activity extends AppCompatActivity {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
+            Bitmap bmp;
             canvas.drawRGB(255,255,255);
-            canvas.drawBitmap(canvasBitmap,0,0,canvasPaint);
+            if(!name.equals(""))
+            {
+                bmp = BitmapFactory.decodeFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/Lienzos/" + name);
+                canvas.drawBitmap(bmp,0,0,canvasPaint);
+            }
+                canvas.drawBitmap(canvasBitmap,0,0,canvasPaint);
             canvas.drawPath(path, brush);
         }
 
@@ -246,4 +277,5 @@ public class Main2Activity extends AppCompatActivity {
             return true;
         }
     }
+
 }
