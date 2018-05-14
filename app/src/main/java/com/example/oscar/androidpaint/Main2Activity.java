@@ -48,6 +48,7 @@ public class Main2Activity extends AppCompatActivity {
     private boolean eraseInAction = false;
     private Lienzo background;
     private String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,7 @@ public class Main2Activity extends AppCompatActivity {
         background = new Lienzo(this);
         myLayout.addView(background);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -135,10 +137,8 @@ public class Main2Activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showNameDialog()
-    {
-        if(name.equals(""))
-        {
+    public void showNameDialog() {
+        if(name.equals("")) {
             AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
             dialogo.setTitle("Ingrese el nombre de la imagen:");
             final EditText input = new EditText(this);
@@ -150,12 +150,10 @@ public class Main2Activity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     String name = input.getText().toString();
                     if(validateNameOfFile(name))
-                        if (!validateIfFileAlreadyExists(name))
-                        {
+                        if (!validateIfFileAlreadyExists(name)) {
                             name += ".png";
                             save(name);
-                        }
-                        else
+                        } else
                             Toast.makeText(Main2Activity.this, "Nombre de imagen existente, asigna otro.", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(Main2Activity.this,"Nombre de archivo inválido",Toast.LENGTH_SHORT).show();
@@ -163,45 +161,38 @@ public class Main2Activity extends AppCompatActivity {
             });
             dialogo.setCancelable(true);
             dialogo.show();
-        }
-        else
+        } else
             save(name);
-
     }
-    private boolean validateNameOfFile(String name)
-    {
-        if(Character.isUpperCase(name.charAt(0)))
-        {
+
+    private boolean validateNameOfFile(String name) {
+        if (name.length() > 0){
+            if(Character.isLowerCase(name.charAt(0))) {
                 for(int x=1; x<name.length(); x++)
                     if(!Character.isLowerCase(name.charAt(x)) && name.charAt(x) != '_' && !Character.isDigit(name.charAt(x)))
                         return false;
-        }
-        else
+            } else
+                return false;
+        } else
             return false;
         return true;
     }
 
-
-    public boolean validateIfFileAlreadyExists(String name)
-    {
-
+    public boolean validateIfFileAlreadyExists(String name) {
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Lienzos/");
         File[] listOfFiles = folder.listFiles();
-        if(listOfFiles != null)
-        {
+        if(listOfFiles != null) {
             String[] myArray;
             myArray = new String[listOfFiles.length];
             for (int x = 0; x < myArray.length; x++)
                 if (listOfFiles[x].getName().equals(name+".png"))
                     return true;
-
         }
         return false;
     }
 
-    public void save(String name)
-    {
-        try{
+    public void save(String name) {
+        try {
             background.setDrawingCacheEnabled(true);
             Bitmap bitmap = background.getDrawingCache();
             File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath(), "Lienzos");
@@ -239,17 +230,10 @@ public class Main2Activity extends AppCompatActivity {
         private Canvas canvasDraw;
         Bitmap canvasBitmap;
 
-
-
-        public Lienzo(Context context)
-        {
+        public Lienzo(Context context) {
             super(context);
             setupDrawing();
-
         }
-
-
-
 
         public void setupDrawing(){
             path = new Path();
@@ -273,12 +257,11 @@ public class Main2Activity extends AppCompatActivity {
             super.onDraw(canvas);
             Bitmap bmp;
             canvas.drawRGB(255,255,255);
-            if(!name.equals(""))
-            {
+            if(!name.equals("")) {
                 bmp = BitmapFactory.decodeFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/Lienzos/" + name);
                 canvas.drawBitmap(bmp,0,0,canvasPaint);
             }
-                canvas.drawBitmap(canvasBitmap,0,0,canvasPaint);
+            canvas.drawBitmap(canvasBitmap,0,0,canvasPaint);
             canvas.drawPath(path, brush);
         }
 

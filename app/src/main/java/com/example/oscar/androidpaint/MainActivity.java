@@ -22,18 +22,15 @@ public class MainActivity extends AppCompatActivity {
     private ListView lvList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvList = (ListView)findViewById(R.id.lvList);
         final Intent intent = new Intent(this, Main2Activity.class);
-        if(isExternalStorageWritable())
-        {
+        if(isExternalStorageWritable()) {
             createDirectory("Lienzos");
             getFiles();
-        }
-        else
+        } else
             Toast.makeText(this,"Memoria externa no disponible", Toast.LENGTH_LONG).show();
         lvList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -54,15 +51,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_principal, menu);
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.newOption){
+        if (item.getItemId() == R.id.newOption)
             toSecondActivity("");
-        } else {
+        else {
             AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
             dialogo.setTitle("Android Paint 1.0");
             dialogo.setMessage("Integrantes:\nOscar Jovanny García Zepeda\nDiego Osvaldo Solorio Lara\nJosé Manuel Sandoval Chávez");
@@ -83,32 +79,26 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private boolean isExternalStorageWritable()
-    {
+    private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    private void createDirectory(String name)
-    {
+    private void createDirectory(String name) {
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath(),name);
         if(!file.exists())
             file.mkdirs();
     }
     public void getFiles(){
-
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) , "Lienzos");
         File[] listOfFiles = folder.listFiles();
-        if(listOfFiles != null)
-        {
+        if(listOfFiles != null) {
             String[] myArray;
-
             myArray = new String[listOfFiles.length];
 
             for (int x = 0; x < myArray.length; x++)
                 if (listOfFiles[x].isFile())
                     myArray[x] = listOfFiles[x].getName();
-
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myArray);
             lvList.setAdapter(adapter);
